@@ -32,12 +32,12 @@ Add a `.env` with any keys you need (for example `GEMINI_API_KEY`), but do NOT c
 
 Semantic embeddings (optional)
 
-An optional small server is included at `server/` to proxy embedding requests (so you don't expose API keys in the browser). It supports calling OpenAI embeddings via `OPENAI_API_KEY` or can be adapted for Gemini. To run the server locally:
+An optional small server is included at `server/` to proxy embedding requests (so you don't expose API keys in the browser). It supports calling GEMINI embeddings via `GEMINI_API_KEY` or can be adapted for Gemini. To run the server locally:
 
 ```powershell
 cd server
 npm install
-setx OPENAI_API_KEY "your_key_here"
+setx GEMINI_API_KEY "your_key_here"
 node index.js
 ```
 
@@ -70,7 +70,7 @@ The “smart” part comes from its **image recognition** feature, which allows 
 
 - **Frontend:** React, Vite, Framer Motion (animations), React Icons, Lottie-React (animations)
 - **Machine Learning:** TensorFlow.js with **MobileNet** model for in-browser image classification (detects ingredients from photos)
-- **Backend (Optional):** Minimal **Node.js** server for proxying requests (e.g., OpenAI or Gemini APIs for semantic embeddings)
+- **Backend (Optional):** Minimal **Node.js** server for proxying requests ( Gemini APIs for semantic embeddings)
 
 ---
 
@@ -126,7 +126,7 @@ Includes several features for a personalized experience:
 
 - **Frontend-First:** Core logic runs entirely in the browser. Easy to deploy on **Netlify** or **Vercel**.
 - **Component-Based:** Built with reusable React components (`/src` directory).
-- **Optional Backend:** A minimal **Node.js** server (`/server` directory) can securely handle API keys for OpenAI or Gemini integrations.
+- **Optional Backend:** A minimal **Node.js** server (`/server` directory) can securely handle API keys for Gemini integrations.
 
 ---
 
