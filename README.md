@@ -1,6 +1,6 @@
 # Smart Recipe — Minimal Prototype
 
-This is a lightweight React + Vite prototype implementing the requested features: ingredient input (text + image recognition), recipe matching, filters, substitutions, serving scaling, favorites, and a recipe database (20 items).
+This is a lightweight React + Vite prototype implementing the requested features: ingredient input (text + image recognition), recipe matching, filters, substitutions, serving scaling, favorites, and a recipe database (20 items). This project less works on design but more focuses on implementation & working..
 
 Quick start
 
@@ -45,7 +45,7 @@ If the server is running, the frontend will attempt semantic matching using embe
 
 Approach (<=200 words)
 
-I built a simple React app that matches recipes by computing ingredient overlap and applying user filters (diet, difficulty, max time). Image-based ingredient recognition uses TensorFlow.js MobileNet to classify an uploaded photo and suggest likely ingredients which are then added to the search. Substitutions are provided via a small heuristic map. Nutrition scales linearly with servings. Favorites and ratings are stored in localStorage for persistence. The app focuses on clear UX, loading states for the image classifier, and graceful fallbacks when no ingredients are provided. The matching logic is deliberately simple (match percentage) so it is fast and explainable; it can be extended with TF-IDF-like weights or semantic matching (embedding models) if desired.
+I built a simple React app that matches recipes by computing ingredient overlap and applying user filters (diet, difficulty, max time). Image-based ingredient recognition uses TensorFlow.js MobileNet to classify an uploaded photo and suggest likely ingredients which are then added to the search. Substitutions are provided via a small heuristic map. Nutrition scales linearly with servings. Favorites and ratings are stored in localStorage for persistence. The app focuses on clear UX, loading states for the image classifier, and graceful fallbacks when no ingredients are provided. The matching logic is deliberately simple (match percentage) so it is fast and explainable; it can be extended with TF-IDF-like weights or semantic matching (embedding models) if desired. We can step by step access to cook the receipe along with predefined receipes 
 
 Notes & limitations
 
