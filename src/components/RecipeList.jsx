@@ -13,6 +13,7 @@ export default function RecipeList({recipes,ingredients,filters,onSelect,favorit
   const [sort,setSort]=useState('score')
   const [loading,setLoading]=useState(false)
   const [ratings,setRatings]=useState(()=> JSON.parse(localStorage.getItem('ratings')||'{}'))
+  const [flippedMap, setFlippedMap] = useState({})
 
   useEffect(()=>{localStorage.setItem('ratings', JSON.stringify(ratings))},[ratings])
 
@@ -31,13 +32,27 @@ export default function RecipeList({recipes,ingredients,filters,onSelect,favorit
   },[recipes,ingredients,matcher])
 
   const filtered = scored.filter(r=>{
-    if(filters.diet!=='any' && !r.diet.includes(filters.diet)) return false
-    if(filters.difficulty!=='any' && r.difficulty!==filters.difficulty) return false
-    if(filters.cuisine && filters.cuisine!=='any' && r.cuisine !== filters.cuisine) return false
-    if(r.time>filters.maxTime) return false
-    // minRating filter: ratings stored in localStorage
-    const currentRating = ratings[r.id] || 0
-    if(filters.minRating && filters.minRating>0 && currentRating < filters.minRating) return false
+    // diet: r.diet may be an array
+    if(filters.diet && filters.diet !== 'any'){
+      const dietList = Array.isArray(r.diet) ? r.diet.map(d=>d.toLowerCase()) : [(r.diet||'').toString().toLowerCase()]
+      if(!dietList.includes(String(filters.diet).toLowerCase())) return false
+    }
+    // difficulty
+    if(filters.difficulty && filters.difficulty !== 'any'){
+      if(String(r.difficulty||'').toLowerCase() !== String(filters.difficulty).toLowerCase()) return false
+    }
+    // cuisine
+    if(filters.cuisine && filters.cuisine !== 'any'){
+      if(String(r.cuisine||'').toLowerCase() !== String(filters.cuisine).toLowerCase()) return false
+    }
+    // max time: treat 0 or missing as unlimited
+    const maxTime = (typeof filters.maxTime === 'number' && filters.maxTime>0) ? filters.maxTime : Infinity
+    if((typeof r.time === 'number') && r.time > maxTime) return false
+    // minRating filter: use stored ratings
+    const storedRatings = JSON.parse(localStorage.getItem('ratings')||'{}')
+    const currentRating = storedRatings[r.id] || 0
+    const minRating = parseInt(filters.minRating||0) || 0
+    if(minRating > 0 && currentRating < minRating) return false
     return true
   }).sort((a,b)=> sort==='score' ? b.score-a.score : a.time-b.time)
 
@@ -73,35 +88,56 @@ export default function RecipeList({recipes,ingredients,filters,onSelect,favorit
                 show: { transition: { staggerChildren: 0.06 } }
               }}
             >
-              {filtered.map(r => (
+              {filtered.map(r => {
+                const flipped = !!flippedMap[r.id]
+                return (
                 <motion.div
                   layout
                   key={r.id}
-                  className="recipe-card"
+                  className={`recipe-card ${flipped? 'flipped flip-container':''}`}
                   initial={{opacity:0,y:8}}
                   animate={{opacity:1,y:0}}
                   exit={{opacity:0,y:6}}
                   whileHover={{ scale: 1.02, y: -4 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 >
-                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                    <div>
-                      <strong>{r.title}</strong> <small>({r.cuisine})</small>
-                      <div><small>{r.time} mins • {r.difficulty} • Score {Math.round(r.score)}</small></div>
+                  <motion.div className="flipper" style={{position:'relative'}} animate={{rotateY: flipped? 180 : 0}} transition={{duration:0.6}}>
+                    <div className="card-front">
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                        <div>
+                          <strong>{r.title}</strong> <small>({r.cuisine})</small>
+                          <div><small>{r.time} mins  {r.difficulty}  Score {Math.round(r.score)}</small></div>
+                        </div>
+                        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                          <button className="btn btn-primary" onClick={()=>onSelect(r)}>Open</button>
+                          <button className="btn btn-ghost" onClick={()=>toggleFav(r)} aria-label="toggle favorite">{favorites.find(f=>f.id===r.id)?'★':'☆'}</button>
+                          <button className="btn btn-ghost" onClick={()=>setFlippedMap(m=>({...m,[r.id]:!m[r.id]}))} title="Flip">Flip</button>
+                        </div>
+                      </div>
+                        <div style={{marginTop:8}}>
+                        <label>Rate: </label>
+                        {[1,2,3,4,5].map(n=> (
+                          <button key={n} className="btn btn-ghost" onClick={()=>setRating(r.id,n)} style={{color: (ratings[r.id]||0)>=n ? '#f59e0b' : '#999'}}>{'★'}</button>
+                        ))}
+                      </div>
                     </div>
-                    <div style={{display:'flex',gap:8,alignItems:'center'}}>
-                      <button onClick={()=>onSelect(r)}>Open</button>
-                      <button onClick={()=>toggleFav(r)} aria-label="toggle favorite">{favorites.find(f=>f.id===r.id)?'★':'☆'}</button>
+
+                    <div className="card-back">
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                        <div>
+                          <strong>About {r.title}</strong>
+                          <div style={{marginTop:8,fontSize:13,color:'var(--muted)'}}>{r.description || r.summary || 'No description available.'}</div>
+                        </div>
+                        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                          <button className="btn btn-ghost" onClick={()=>setFlippedMap(m=>({...m,[r.id]:false}))}>Back</button>
+                          <button className="btn btn-primary" onClick={()=>onSelect(r)}>Open</button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div style={{marginTop:8}}>
-                    <label>Rate: </label>
-                    {[1,2,3,4,5].map(n=> (
-                      <button key={n} onClick={()=>setRating(r.id,n)} style={{color: (ratings[r.id]||0)>=n ? '#f59e0b' : '#999'}}>{'★'}</button>
-                    ))}
-                  </div>
+                  </motion.div>
                 </motion.div>
-              ))}
+                )
+              })}
             </motion.div>
           </AnimatePresence>
         )}

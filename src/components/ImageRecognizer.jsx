@@ -52,7 +52,7 @@ export default function ImageRecognizer({addIngredient}){
           <motion.div initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:6}} className="scan-toast">
             <div><strong>Scan complete</strong></div>
             <div style={{fontSize:'0.9em',marginTop:6}}>Detected: {detectedLabels.join(', ')}</div>
-            <div style={{marginTop:8}}><button onClick={addAll}>Add all</button> <button onClick={()=>setDetectedLabels([])} style={{marginLeft:8}}>Dismiss</button></div>
+            <div style={{marginTop:8}}><button className="btn btn-ghost" onClick={addAll}>Add all</button> <button className="btn btn-ghost" onClick={()=>setDetectedLabels([])} style={{marginLeft:8}}>Dismiss</button></div>
           </motion.div>
         )}
       </AnimatePresence>

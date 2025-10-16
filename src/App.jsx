@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { GiCookingPot } from 'react-icons/gi'
 import recipesData from './data/recipes.json'
@@ -10,6 +10,10 @@ import ImageRecognizer from './components/ImageRecognizer'
 import PantryGame from './components/PantryGame'
 import ManageRecipes from './components/ManageRecipes'
 import Suggestions from './components/Suggestions'
+import UseItUp from './components/UseItUp'
+import Extras from './components/Extras'
+import { ToastProvider } from './components/Toast'
+const HeroLottie = React.lazy(()=>import('./components/HeroLottie'))
 
 export default function App() {
   const [ingredients, setIngredients] = useState([])
@@ -25,6 +29,9 @@ export default function App() {
     }catch(e){return recipesData}
   })
 
+  const [tab, setTab] = useState('browse')
+  const contentRef = React.useRef(null)
+
   useEffect(() => { localStorage.setItem('favorites', JSON.stringify(favorites)) }, [favorites])
 
   function clearIngredients() { setIngredients([]) }
@@ -38,19 +45,38 @@ export default function App() {
     localStorage.setItem('customRecipes', JSON.stringify(custom))
   }
 
+  // listen for external imports (file paste via ManageRecipes when App didn't provide onImport)
+  useEffect(()=>{
+    function onCustom(e){
+      try{
+        const merged = [...recipes, ...(e.detail||[])]
+        setRecipes(merged)
+      }catch(e){/* ignore */}
+    }
+    window.addEventListener('customRecipesUpdated', onCustom)
+    return ()=> window.removeEventListener('customRecipesUpdated', onCustom)
+  },[recipes])
+
   return (
-    <div className="app">
+  <ToastProvider>
+  <div className="app">
       <header className="app-header">
         <div className="brand"><div className="logo"><GiCookingPot size={20} /></div><h1>Smart Recipe</h1></div>
       </header>
+      {/* tabs removed — Extras will live in the right column */}
+
       <div className="hero">
         <motion.div className="left" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{duration:0.45}}>
           <h2>Find recipes from what's in your kitchen</h2>
           <p className="small">Snap or type ingredients and we'll suggest recipes, substitutions, and step-by-step cooking guidance.</p>
-          <button className="cta">Get started</button>
+          <button className="cta" onClick={()=>{ setTab('browse'); setTimeout(()=>{ contentRef.current?.scrollIntoView({behavior:'smooth', block:'start'}) }, 50) }}>Get started</button>
         </motion.div>
         <motion.div className="right" initial={{opacity:0,scale:0.98}} animate={{opacity:1,scale:1}} transition={{duration:0.45}}>
-          <div className="hero-preview">🍳</div>
+          <div className="hero-preview">
+            <Suspense fallback={<div style={{fontSize:40}}>🍳</div>}>
+              <HeroLottie />
+            </Suspense>
+          </div>
         </motion.div>
       </div>
       <main className="app-grid">
@@ -141,9 +167,17 @@ export default function App() {
         </section>
         <aside className="rightside">
           <Suggestions recipes={recipes} favorites={favorites} ratings={JSON.parse(localStorage.getItem('ratings')||'{}')} detectedIngredients={ingredients} onSelect={setSelectedRecipe} />
+          <UseItUp recipes={recipes} ingredients={ingredients} onSelect={setSelectedRecipe} />
           <PantryGame ingredients={ingredients} />
+          <div className="extras-card"><Extras setIngredients={setIngredients} /></div>
           <ManageRecipes recipes={recipes} onDeleteCustom={(id)=>{
             const next = recipes.filter(r=>r.id!==id)
+            setRecipes(next)
+            const custom = next.filter(x=>!recipesData.find(y=>y.id===x.id))
+            localStorage.setItem('customRecipes', JSON.stringify(custom))
+          }} onImport={(items)=>{
+            // merge incoming items into recipes and persist customs
+            const next = [...recipes, ...items]
             setRecipes(next)
             const custom = next.filter(x=>!recipesData.find(y=>y.id===x.id))
             localStorage.setItem('customRecipes', JSON.stringify(custom))
@@ -151,5 +185,6 @@ export default function App() {
         </aside>
       </main>
     </div>
+    </ToastProvider>
   )
 }

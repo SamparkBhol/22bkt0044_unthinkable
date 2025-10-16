@@ -1,41 +1,126 @@
 :root{
-  --bg:#0b1720;
-  --card:#0f2130;
-  --muted:#6b7280;
-  --accent:#06b6d4;
-  --glass: rgba(255,255,255,0.06);
+  /* refined color system */
+  --bg-900: #041018;
+  --bg-800: #071826;
+  --card: #0b2230;
+  --muted: #9fb2c3;
+  --accent1: #06b6d4; /* cyan */
+  --accent2: #7c3aed; /* purple */
+  --btn-on: #042024;
+  --glass: rgba(255,255,255,0.05);
   --glass-2: rgba(255,255,255,0.03);
+  --surface-elev: rgba(255,255,255,0.02);
 }
 *{box-sizing:border-box}
 .app header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.04)}
-body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;margin:0;color:#eaf2f8;background:linear-gradient(180deg,#07182a 0%, #0b2330 60%);-webkit-font-smoothing:antialiased}
+.top-tabs{display:flex;gap:8px;align-items:center;justify-content:flex-start;padding:12px 28px;border-bottom:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent)}
+.top-tabs .btn{padding:8px 12px}
+.top-tabs .btn-primary{box-shadow:0 10px 30px rgba(6,182,212,0.06)}
+.app, body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;margin:0;color:#eaf2f8;background:linear-gradient(180deg,#07182a 0%, #0b2330 60%);-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0 0 8px 0;font-weight:700}
+
+/* Hero headline treatment */
+.hero .left h2{font-size:28px;line-height:1.05;background:linear-gradient(90deg,var(--accent1), var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .left .small{max-width:540px}
+
+/* Tag/badge styles */
+.badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.02);font-size:12px;color:var(--muted)}
+.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(124,58,237,0.12);color:#e9d5ff;font-size:12px;margin-right:6px}
+
+/* Controls & inputs */
+input, select, textarea{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;color:inherit}
+.controls button{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--accent)}
+
+/* Favorites list */
+.favorites h3{margin-bottom:6px}
+.favorites ul{max-height:160px;overflow:auto;padding-right:6px}
+.fav-link{display:block;padding:6px 8px;border-radius:8px}
+
+/* Recipe title and meta */
+.recipe-card strong{display:block;font-size:16px;color:#fff}
+.recipe-card small{color:var(--muted)}
+.recipe-meta{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* Rightside tweaks */
+.rightside{width:300px}
+
+/* Responsive adjustments */
+@media(max-width:800px){
+  .hero{flex-direction:column;gap:12px}
+  .hero .left{max-width:100%}
+  .hero-preview{width:100%;height:220px}
+  .rightside{width:100%}
+}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700}
+.logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 12px 36px rgba(6,30,40,0.6)}
 .nav{display:flex;gap:12px;align-items:center}
 .nav button{background:transparent;border:0;color:var(--muted);padding:8px 12px;border-radius:8px}
 .nav button.active{color:#fff;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))}
 main{display:grid;grid-template-columns:320px 1fr 360px;gap:20px;padding:28px;max-width:1200px;margin:0 auto}
 .sidebar{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(3,7,18,0.6)}
-.content{background:linear-gradient(180deg,var(--glass),var(--glass-2));padding:18px;border-radius:12px;box-shadow:0 8px 28px rgba(3,7,18,0.6)}
-.detail{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 28px rgba(3,7,18,0.6)}
+.content{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:14px;box-shadow:0 12px 40px rgba(2,8,20,0.6)}
+.detail{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));padding:20px;border-radius:14px;box-shadow:0 12px 40px rgba(2,8,20,0.6)}
 .ingredient-list{display:flex;flex-wrap:wrap;gap:6px}
 .ingredient-pill{background:rgba(255,255,255,0.04);padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);font-size:14px}
-.recipe-card{border-radius:10px;padding:12px;margin-bottom:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);transition:transform .18s ease,box-shadow .18s ease}
+.recipe-card{border-radius:12px;padding:14px;margin-bottom:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);transition:transform .18s ease,box-shadow .18s ease}
 .recipe-card{will-change:transform}
-.recipe-card:hover{box-shadow:0 20px 40px rgba(2,6,23,0.6)}
+.recipe-card:hover{box-shadow:0 28px 60px rgba(3,9,25,0.6);transform:translateY(-4px)}
 .placeholder{color:var(--muted);padding:24px;text-align:center}
 .hero{grid-column:1/-1;background:linear-gradient(90deg,rgba(6,182,212,0.08),rgba(124,58,237,0.05));padding:28px;border-radius:12px;display:flex;align-items:center;justify-content:space-between}
 .hero .left{max-width:60%}
-.cta{background:linear-gradient(90deg,var(--accent),#7c3aed);padding:10px 16px;border-radius:999px;color:#042024;border:0}
+.cta{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:10px 18px;border-radius:999px;color:var(--btn-on);border:0;font-weight:600;box-shadow:0 12px 40px rgba(6,182,212,0.08)}
 .small{font-size:13px;color:var(--muted)}
- .hero-preview{font-size:56px;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center}
+.hero-preview{width:360px;max-width:44vw;height:260px;display:flex;align-items:center;justify-content:center;border-radius:14px;overflow:hidden}
+
+.hero-lottie{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.hero-lottie > div{width:100%;height:100%}
+
+/* Buttons */
+button{background:transparent;border:0;color:inherit;padding:8px 10px;border-radius:8px;cursor:pointer}
+button:focus{outline:2px solid rgba(6,182,212,0.18);outline-offset:2px}
+button.cta, .cta{cursor:pointer}
+button[aria-label="toggle favorite"]{font-size:18px;padding:6px}
+
+.small-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px}
+
+.recipe-card .card-front, .recipe-card .card-back{padding:6px}
 @media(max-width:1000px){main{grid-template-columns:1fr;gap:12px}.hero .left{max-width:100%}.detail{order:3}.sidebar{order:1}.content{order:2}}
 
 .rightside{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 28px rgba(3,7,18,0.6);width:260px}
 .pantry-game{margin-bottom:12px}
+.extras-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;margin-top:12px}
 .manage-recipes ul{list-style:none;padding:0;margin:6px 0}
 .manage-recipes li{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
 .ingredient-pills .ingredient-pill{margin:4px}
+
+.manage-textarea{width:100%;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);max-width:100%;box-sizing:border-box;resize:vertical;min-height:86px;overflow:auto}
+
+.manage-recipes{max-height:560px;overflow:auto;padding-right:8px}
+.manage-recipes h5{margin:6px 0}
+
+/* Manage card styling */
+.manage-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px}
+.manage-header{display:flex;align-items:center;justify-content:space-between}
+.manage-list{list-style:none;padding:0;margin:8px 0}
+.manage-list-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,0.01)}
+.manage-item-title{font-weight:700}
+.manage-item-actions button{margin-left:6px}
+
+/* Leaderboard styles */
+.leaderboard-list{padding:0;margin:0}
+.leaderboard-item{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;margin-bottom:6px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00))}
+.leader-name{font-weight:700}
+.leader-meta{font-size:12px;color:var(--muted)}
+.medal{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}
+.medal.top svg{width:18px;height:18px}
+.medal.top:nth-child(1){background:linear-gradient(90deg,#ffd700,#ffec99)}
+.medal.top:nth-child(2){background:linear-gradient(90deg,#c0c0c0,#e6e6e6)}
+.medal.top:nth-child(3){background:linear-gradient(90deg,#cd7f32,#eac9a3)}
+
+.leaderboard li:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(2,8,20,0.6)}
+.leaderboard li{transition:transform .18s ease,box-shadow .18s ease}
+.leaderboard .medal{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center}
+.manage-recipes button{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px}
 
 .steps-list{list-style:none;padding:0;margin:0}
 .steps-list li{display:flex;gap:12px;padding:10px 6px;border-bottom:1px dashed rgba(255,255,255,0.02)}
@@ -57,4 +142,48 @@ main{display:grid;grid-template-columns:320px 1fr 360px;gap:20px;padding:28px;ma
 /* subtle animations */
 .fade-in{animation:fadeIn .4s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* 3D flip support: we wrap content in front/back when flipping */
+.recipe-card.flip-container{perspective:1000px}
+.recipe-card .flipper{position:relative;transform-style:preserve-3d;transition:transform .6s}
+.recipe-card.flipped .flipper{transform:rotateY(180deg)}
+.recipe-card .card-front, .recipe-card .card-back{backface-visibility:hidden;position:relative}
+.recipe-card .card-back{position:absolute;inset:0;transform:rotateY(180deg)}
+
+/* small helper: when reduced-motion is requested, disable heavy transforms */
+@media (prefers-reduced-motion: reduce){
+  .recipe-card, .recipe-card .flipper{transition:none !important;transform:none !important}
+  .hero-lottie, .hero-preview{animation:none !important}
+}
+
+/* Button utilities */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.btn:focus{outline:2px solid rgba(6,182,212,0.14);outline-offset:2px}
+.btn-primary{background:linear-gradient(90deg,var(--accent1), var(--accent2));color:var(--btn-on);border:0;box-shadow:0 8px 28px rgba(12,30,40,0.6)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+
+/* modal styling for SubstituteModal */
+.modal-backdrop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6));z-index:80}
+.modal{background:var(--card);padding:18px;border-radius:12px;max-width:520px;width:92%;box-shadow:0 30px 80px rgba(2,8,20,0.7);border:1px solid rgba(255,255,255,0.03)}
+.modal h3{margin:0 0 8px 0}
+.modal select{width:100%;padding:8px;border-radius:8px}
+.modal button{margin-top:10px}
+
+/* Better select dropdown styling for dark theme */
+select{background:var(--card);color:#eaf2f8;border:1px solid rgba(255,255,255,0.05);padding:8px;border-radius:8px;appearance:none}
+select:focus{outline:2px solid rgba(6,182,212,0.14);outline-offset:2px}
+select option{background:var(--card);color:#eaf2f8}
+
+/* utility class for selects when needed */
+.select{display:inline-block;width:100%;max-width:100%}
+
+/* small spinner for loading states */
+.spinner{display:inline-block;width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.08);border-top-color:var(--accent1);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* toast styles used by ManageRecipes */
+.toast{display:inline-block;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,0.32);color:#e6f9f8;border:1px solid rgba(255,255,255,0.04)}
+.toast.success{background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.08));color:#eafbf9}
+.toast.error{background:linear-gradient(90deg, rgba(255,66,66,0.12), rgba(255,66,66,0.04));color:#ffeef0}
+.toast.info{background:rgba(255,255,255,0.02);color:var(--muted)}
 
