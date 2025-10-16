@@ -1,6 +1,6 @@
 # Smart Recipe — Minimal Prototype
 
-This is a lightweight React + Vite prototype implementing the requested features: ingredient input (text + image recognition), recipe matching, filters, substitutions, serving scaling, favorites, and a recipe database (20 items). This project less works on design but more focuses on implementation & working..
+This is a lightweight React + Vite prototype implementing the requested features: ingredient input (text + image recognition), recipe matching, filters, substitutions, serving scaling, favorites, and a recipe database (20 items). This project less works on design but more focuses on implementation & working..along with this there is a voice helping and guiding with steps for a prequisite receipe
 
 Quick start
 
