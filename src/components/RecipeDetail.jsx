@@ -16,7 +16,7 @@ const SUBSTITUTIONS = {
   'chicken':['tofu','chickpeas']
 }
 
-export default function RecipeDetail({recipe, favorites, setFavorites}){
+export default function RecipeDetail({recipe, favorites, setFavorites, detectedIngredients=[]}){
   const [servings, setServings] = useState(recipe.servings)
   const [ratings, setRatings] = useState(()=> JSON.parse(localStorage.getItem('ratings')||'{}'))
   const [showGuided, setShowGuided] = useState(false)
@@ -76,7 +76,11 @@ export default function RecipeDetail({recipe, favorites, setFavorites}){
         <h3>Steps</h3>
         <div><button onClick={()=>setShowGuided(true)}>Start guided cook</button></div>
       </div>
-      <ol className="steps-list">{recipe.steps.map((s,i)=> <li key={i}><div className="step-index">{i+1}</div><div className="step-text">{s}</div></li>)}</ol>
+      <ol className="steps-list">{recipe.steps.map((s,i)=>{
+        const lower = s.toLowerCase()
+        const uses = detectedIngredients.filter(d=> lower.includes(d.toLowerCase())).slice(0,3)
+        return (<li key={i}><div className="step-index">{i+1}</div><div className="step-text">{s}{uses.length>0 && <div className="step-uses">Uses: {uses.join(', ')}</div>}</div></li>)
+      })}</ol>
     {showGuided && <GuidedCook recipe={recipe} onClose={()=>setShowGuided(false)} />}
     </motion.article>
   )

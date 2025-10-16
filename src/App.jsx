@@ -2,23 +2,41 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GiCookingPot } from 'react-icons/gi'
 import recipesData from './data/recipes.json'
+import AddRecipeForm from './components/AddRecipeForm'
 import IngredientInput from './components/IngredientInput'
 import RecipeList from './components/RecipeList'
 import RecipeDetail from './components/RecipeDetail'
 import ImageRecognizer from './components/ImageRecognizer'
+import PantryGame from './components/PantryGame'
+import ManageRecipes from './components/ManageRecipes'
+import Suggestions from './components/Suggestions'
 
 export default function App() {
   const [ingredients, setIngredients] = useState([])
-  const [filters, setFilters] = useState({ diet: 'any', difficulty: 'any', maxTime: 120 })
+  const [filters, setFilters] = useState({ diet: 'any', difficulty: 'any', maxTime: 120, cuisine: 'any', minRating: 0 })
   const [selectedRecipe, setSelectedRecipe] = useState(null)
   const [favorites, setFavorites] = useState(() => {
     try { return JSON.parse(localStorage.getItem('favorites') || '[]') } catch { return [] }
+  })
+  const [recipes, setRecipes] = useState(() => {
+    try{
+      const custom = JSON.parse(localStorage.getItem('customRecipes')||'[]')
+      return [...recipesData, ...custom]
+    }catch(e){return recipesData}
   })
 
   useEffect(() => { localStorage.setItem('favorites', JSON.stringify(favorites)) }, [favorites])
 
   function clearIngredients() { setIngredients([]) }
   function clearFavorites() { setFavorites([]) }
+
+  function addCustomRecipe(r){
+    const next = [...recipes, r]
+    setRecipes(next)
+    // persist only the custom ones (filter out originals by id)
+    const custom = next.filter(x=>!recipesData.find(y=>y.id===x.id))
+    localStorage.setItem('customRecipes', JSON.stringify(custom))
+  }
 
   return (
     <div className="app">
@@ -65,17 +83,47 @@ export default function App() {
             <label>Max time (mins):
               <input type="number" value={filters.maxTime} onChange={e => setFilters({ ...filters, maxTime: parseInt(e.target.value || '0') })} />
             </label>
+            <label>Cuisine:
+              <select value={filters.cuisine} onChange={e => setFilters({ ...filters, cuisine: e.target.value })}>
+                <option value="any">Any</option>
+                <option value="Italian">Italian</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Indian">Indian</option>
+                <option value="Mexican">Mexican</option>
+                <option value="American">American</option>
+              </select>
+            </label>
+            <label>Min rating:
+              <select value={filters.minRating} onChange={e=>setFilters({...filters,minRating:parseInt(e.target.value||0)})}>
+                <option value={0}>Any</option>
+                <option value={3}>3+</option>
+                <option value={4}>4+</option>
+                <option value={5}>5</option>
+              </select>
+            </label>
           </div>
 
           <div className="favorites">
             <h3>Favorites</h3>
-            <ul>{favorites.map(f => <li key={f.id}>{f.title}</li>)}</ul>
+            <ul>
+              {favorites.map(f => (
+                <li key={f.id}><button className="fav-link" onClick={()=>{
+                  const r = recipes.find(r=>r.id===f.id)
+                  if(r) setSelectedRecipe(r)
+                }}>{f.title}</button></li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{marginTop:12}}>
+            <h3>Add a custom recipe</h3>
+            <AddRecipeForm onAdd={addCustomRecipe} />
           </div>
         </aside>
 
         <section className="content">
           <RecipeList
-            recipes={recipesData}
+            recipes={recipes}
             ingredients={ingredients}
             filters={filters}
             onSelect={setSelectedRecipe}
@@ -86,11 +134,21 @@ export default function App() {
 
         <section className="detail">
           {selectedRecipe ? (
-            <RecipeDetail recipe={selectedRecipe} favorites={favorites} setFavorites={setFavorites} />
+            <RecipeDetail recipe={selectedRecipe} favorites={favorites} setFavorites={setFavorites} detectedIngredients={ingredients} />
           ) : (
             <div className="placeholder">Select a recipe to see details</div>
           )}
         </section>
+        <aside className="rightside">
+          <Suggestions recipes={recipes} favorites={favorites} ratings={JSON.parse(localStorage.getItem('ratings')||'{}')} detectedIngredients={ingredients} onSelect={setSelectedRecipe} />
+          <PantryGame ingredients={ingredients} />
+          <ManageRecipes recipes={recipes} onDeleteCustom={(id)=>{
+            const next = recipes.filter(r=>r.id!==id)
+            setRecipes(next)
+            const custom = next.filter(x=>!recipesData.find(y=>y.id===x.id))
+            localStorage.setItem('customRecipes', JSON.stringify(custom))
+          }} />
+        </aside>
       </main>
     </div>
   )

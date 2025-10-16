@@ -33,7 +33,11 @@ export default function RecipeList({recipes,ingredients,filters,onSelect,favorit
   const filtered = scored.filter(r=>{
     if(filters.diet!=='any' && !r.diet.includes(filters.diet)) return false
     if(filters.difficulty!=='any' && r.difficulty!==filters.difficulty) return false
+    if(filters.cuisine && filters.cuisine!=='any' && r.cuisine !== filters.cuisine) return false
     if(r.time>filters.maxTime) return false
+    // minRating filter: ratings stored in localStorage
+    const currentRating = ratings[r.id] || 0
+    if(filters.minRating && filters.minRating>0 && currentRating < filters.minRating) return false
     return true
   }).sort((a,b)=> sort==='score' ? b.score-a.score : a.time-b.time)
 

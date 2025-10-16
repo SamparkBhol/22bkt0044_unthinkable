@@ -31,6 +31,12 @@ main{display:grid;grid-template-columns:320px 1fr 360px;gap:20px;padding:28px;ma
  .hero-preview{font-size:56px;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center}
 @media(max-width:1000px){main{grid-template-columns:1fr;gap:12px}.hero .left{max-width:100%}.detail{order:3}.sidebar{order:1}.content{order:2}}
 
+.rightside{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 28px rgba(3,7,18,0.6);width:260px}
+.pantry-game{margin-bottom:12px}
+.manage-recipes ul{list-style:none;padding:0;margin:6px 0}
+.manage-recipes li{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.ingredient-pills .ingredient-pill{margin:4px}
+
 .steps-list{list-style:none;padding:0;margin:0}
 .steps-list li{display:flex;gap:12px;padding:10px 6px;border-bottom:1px dashed rgba(255,255,255,0.02)}
 .step-index{width:28px;height:28px;border-radius:999px;background:rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;font-weight:700}
@@ -42,6 +48,11 @@ main{display:grid;grid-template-columns:320px 1fr 360px;gap:20px;padding:28px;ma
 .guided-bar{height:100%;background:linear-gradient(90deg,var(--accent),#7c3aed);border-radius:999px;width:0}
 .guided-step{padding:12px 0}
 .guided-controls{display:flex;gap:8px;justify-content:flex-end}
+
+.add-recipe-form input,.add-recipe-form textarea{width:100%;padding:8px;margin:6px 0;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.add-recipe-form button{padding:8px 12px;border-radius:8px;background:var(--accent);border:0;color:#042024}
+.fav-link{background:transparent;border:0;color:var(--accent);text-decoration:underline;cursor:pointer}
+.step-uses{margin-top:6px;font-size:13px;color:var(--accent)}
 
 /* subtle animations */
 .fade-in{animation:fadeIn .4s ease}
